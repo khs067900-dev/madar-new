@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IoCartOutline, IoCheckmark, IoArrowBack } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { IoCartOutline, IoCheckmark } from "react-icons/io5";
+import toast from "react-hot-toast";
 import type { Product } from "./types";
 import { useCartStore } from "../../store/cartStore";
 import "./product-card.css";
