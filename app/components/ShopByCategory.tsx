@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CategorySlider from "./CategorySlider";
 
 const BACKEND = process.env.BACKEND_URL || "http://localhost:5000";
@@ -110,13 +111,13 @@ export default async function ShopByCategory() {
             className="flex-1 h-px"
             style={{ background: "linear-gradient(to left, transparent, #D4E8F2 40%, transparent)" }}
           />
-          <a
+          <Link
             href="/store"
             className="text-xs font-bold shrink-0 transition-colors hover:text-[#003048]"
             style={{ color: "#0889A2" }}
           >
             عرض الكل ←
-          </a>
+          </Link>
         </div>
 
         {/* الدواير */}

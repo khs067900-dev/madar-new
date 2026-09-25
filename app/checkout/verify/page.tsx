@@ -39,7 +39,6 @@ export default function VerifyPage() {
         return prev - 1;
       });
     }, 1000);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // check lockout on mount

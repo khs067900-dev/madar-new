@@ -72,7 +72,6 @@ export default function SubCategoriesPage() {
     fetchData();
   }
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchData(); }, []);
 
   const visibleCount = settings.filter((s) => s.showInHome && s.category !== "__config__").length;

@@ -22,6 +22,7 @@ const COLOR_ORDER: string[] = [
   "صحراوي",
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function colorPriority(color?: string, name?: string): number {
   const src = (color && color.trim()) ? color.trim() : "";
   if (!src) {
@@ -37,6 +38,7 @@ function colorPriority(color?: string, name?: string): number {
   return partial !== -1 ? partial : COLOR_ORDER.length;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function parseStorage(s?: string, name?: string): number {
   const sources = [s, name].filter(Boolean) as string[];
   for (const raw of sources) {

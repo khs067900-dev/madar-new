@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navItems } from "./data";
 import { SearchIcon, CartIcon, MenuIcon, CloseIcon } from "./icons";
-import DesktopNav from "./DesktopNav";
+
 import MobileMenu from "./MobileMenu";
 import { useCartStore } from "../../store/cartStore";
 
@@ -62,11 +62,7 @@ export default function Navbar() {
     return () => clearTimeout(t);
   }, [searchQuery, fetchResults]);
 
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 1024) setMobileOpen(false); };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -90,6 +86,8 @@ export default function Navbar() {
           {/* Mobile hamburger — يظهر دايماً */}
           <button
             aria-label="القائمة"
+            aria-expanded={mobileOpen}
+            aria-controls="store-menu"
             className={`p-1.5 rounded-xl transition-colors shrink-0 ${scrolled ? "text-gray-700 hover:bg-gray-100" : "text-gray-900 hover:bg-white/20"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
@@ -289,3 +287,4 @@ export default function Navbar() {
     </>
   );
 }
+
