@@ -1,11 +1,24 @@
 "use client";
 
 import React, { useState, useMemo, useRef } from "react";
+import Image from "next/image";
 import {
   User, Phone, MapPin, CreditCard, Calendar,
   IdCard, ChevronDown, CheckCircle2, ArrowLeft, Lock,
 } from "lucide-react";
 import type { CustomerInfo } from "../../store/cartStore";
+
+function SAR({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/money-icon.webp"
+      alt="ر.س"
+      width={32}
+      height={32}
+      className={`inline-block align-middle ${className ?? ""}`}
+    />
+  );
+}
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -43,9 +56,9 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
     const now = new Date();
     return Array.from({ length: months }, (_, i) => {
       const d = new Date(now.getFullYear(), now.getMonth() + i + 1, now.getDate());
-      return { index: i + 1, date: `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`, amount: monthlyPayment };
+      return { index: i + 1, date: `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`, amount: i === months - 1 ? Math.max(0, total - downPayment - monthlyPayment * (months - 1)) : monthlyPayment };
     });
-  }, [months, monthlyPayment]);
+  }, [months, monthlyPayment, total, downPayment]);
 
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -74,15 +87,15 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
   const isContactDone = whatsapp.trim() && address.trim() && !errors.whatsapp && !errors.address;
 
   return (
-    <div ref={formRef} className="bg-black/20 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/10 overflow-hidden">
+    <div ref={formRef} className="bg-white rounded-2xl sm:rounded-3xl border border-[#dce8eb] overflow-hidden">
 
       {/* ═══ STEP 1: All Info ═══ */}
       <div className="p-4 sm:p-6 lg:p-7">
         <div className="flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6">
           <StepDot done={!!isPersonalDone && !!isContactDone} number={1} />
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">معلوماتك</h3>
-            <p className="text-[10px] sm:text-[11px] text-white/70 mt-0.5">الاسم والهوية والتواصل والعنوان</p>
+            <h3 className="text-sm sm:text-base font-black text-[#173e48]">معلوماتك</h3>
+            <p className="text-[10px] sm:text-[11px] text-[#657e86] mt-0.5">الاسم والهوية والتواصل والعنوان</p>
           </div>
         </div>
 
@@ -139,13 +152,13 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
         <div className="flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6">
           <StepDot done={false} number={2} />
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">طريقة الدفع</h3>
-            <p className="text-[10px] sm:text-[11px] text-white/70 mt-0.5">اختر الطريقة المناسبة لك</p>
+            <h3 className="text-sm sm:text-base font-black text-[#173e48]">طريقة الدفع</h3>
+            <p className="text-[10px] sm:text-[11px] text-[#657e86] mt-0.5">اختر الطريقة المناسبة لك</p>
           </div>
         </div>
 
         {/* Payment Tabs */}
-        <div className="flex bg-black/20 rounded-xl sm:rounded-2xl p-1 sm:p-1.5 mb-4 sm:mb-5">
+        <div className="flex bg-[#f3f7f8] rounded-xl sm:rounded-2xl p-1 sm:p-1.5 mb-4 sm:mb-5">
           {([
             { key: "installment" as const, label: "تقسيط شهري", icon: <Calendar size={14} /> },
             { key: "full" as const, label: "دفع كامل", icon: <CreditCard size={14} /> },
@@ -158,8 +171,8 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
                 onClick={() => setInstallmentType(key)}
                 className={`flex-1 py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 ${
                   active
-                    ? "bg-white/15 text-white shadow-sm"
-                    : "text-white/70 hover:text-white"
+                    ? "bg-white text-[#173e48] shadow-sm"
+                    : "text-[#657e86] hover:text-[#173e48]"
                 }`}
               >
                 {icon}
@@ -170,9 +183,9 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
         </div>
 
         {installmentType === "full" ? (
-          <div className="text-center py-5 sm:py-6 bg-black/20 rounded-xl sm:rounded-2xl border border-white/10">
-            <p className="text-2xl sm:text-3xl font-black text-[#65E0CD]">{fmt(total)} <span className="text-xs sm:text-sm text-white/70">ر.س</span></p>
-            <p className="text-[11px] sm:text-xs text-white/80 mt-1.5 sm:mt-2">دفعة واحدة عند الاستلام</p>
+          <div className="text-center py-5 sm:py-6 bg-[#f3f7f8] rounded-xl sm:rounded-2xl border border-[#dce8eb]">
+            <p className="text-2xl sm:text-3xl font-black text-[#087e94]">{fmt(total)} <SAR className="opacity-70 mb-1" /></p>
+            <p className="text-[11px] sm:text-xs text-[#52717a] mt-1.5 sm:mt-2">دفعة واحدة عند الاستلام</p>
           </div>
         ) : (
           <div className="space-y-4 sm:space-y-5">
@@ -189,7 +202,7 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
                 value={downPaymentExtra}
                 onChange={(v) => setDownPaymentExtra(Number(v))}
                 options={[
-                  ...DOWN_PAYMENT_OPTIONS.map(v => ({ value: v - minDownPayment, label: `${fmt(v)} ر.س` })),
+                  ...DOWN_PAYMENT_OPTIONS.map(v => ({ value: v - minDownPayment, label: `${fmt(v)}` })),
                   { value: total - minDownPayment, label: `كامل (${fmt(total)})` },
                 ]}
               />
@@ -197,8 +210,8 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
 
             {/* Payment Summary Cards */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              <PaymentCard label="القسط الشهري" value={`${fmt(monthlyPayment)}`} unit="ر.س" highlight />
-              <PaymentCard label="الدفعة الأولى" value={`${fmt(downPayment)}`} unit="ر.س" />
+              <PaymentCard label="القسط الشهري" value={`${fmt(monthlyPayment)}`} unit={<SAR className="opacity-60" />} highlight />
+              <PaymentCard label="الدفعة الأولى" value={`${fmt(downPayment)}`} unit={<SAR className="opacity-60" />} />
               <PaymentCard label="عدد الأقساط" value={`${months}`} unit="شهر" />
             </div>
 
@@ -206,19 +219,19 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
             {months > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2.5 sm:mb-3">
-                  <Calendar size={13} className="text-[#65E0CD]" />
-                  <span className="text-[11px] sm:text-xs font-bold text-white/80">جدول السداد</span>
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-[9px] sm:text-[10px] text-white/70 bg-white/10 px-1.5 sm:px-2 py-0.5 rounded-full">{months} دفعة</span>
+                  <Calendar size={13} className="text-[#087e94]" />
+                  <span className="text-[11px] sm:text-xs font-bold text-[#52717a]">جدول السداد</span>
+                  <div className="flex-1 h-px bg-[#eaf2f4]" />
+                  <span className="text-[9px] sm:text-[10px] text-[#657e86] bg-[#eaf2f4] px-1.5 sm:px-2 py-0.5 rounded-full">{months} دفعة</span>
                 </div>
-                <div className="max-h-44 sm:max-h-52 overflow-y-auto rounded-lg sm:rounded-xl border border-white/10 divide-y divide-white/5 bg-black/20">
+                <div className="max-h-44 sm:max-h-52 overflow-y-auto rounded-lg sm:rounded-xl border border-[#dce8eb] divide-y divide-white/5 bg-[#f3f7f8]">
                   {schedule.map((row) => (
-                    <div key={row.index} className="flex items-center px-3 sm:px-4 py-2 sm:py-2.5 hover:bg-white/5 transition">
-                      <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 flex items-center justify-center text-[9px] sm:text-[10px] font-black text-white/50 shrink-0">
+                    <div key={row.index} className="flex items-center px-3 sm:px-4 py-2 sm:py-2.5 hover:bg-[#edf4f5] transition">
+                      <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#eaf2f4] flex items-center justify-center text-[9px] sm:text-[10px] font-black text-[#82969d] shrink-0">
                         {row.index}
                       </span>
-                      <span className="text-[11px] sm:text-xs text-white/70 mr-2.5 sm:mr-3 flex-1">{row.date}</span>
-                      <span className="text-[11px] sm:text-xs font-black text-white">{fmt(row.amount)} ر.س</span>
+                      <span className="text-[11px] sm:text-xs text-[#657e86] mr-2.5 sm:mr-3 flex-1">{row.date}</span>
+                      <span className="text-[11px] sm:text-xs font-black text-[#173e48] flex items-center gap-0.5">{fmt(row.amount)} <SAR className="opacity-70" /></span>
                     </div>
                   ))}
                 </div>
@@ -232,14 +245,14 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
       <div className="p-4 sm:p-6 lg:p-7 pt-0 sm:pt-0 lg:pt-0">
         <button
           onClick={handleSubmit}
-          className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-[#053132] font-black text-sm sm:text-base transition-all duration-200 hover:scale-[1.01] hover:shadow-lg active:scale-[0.99] flex items-center justify-center gap-2"
-          style={{ background: "linear-gradient(135deg, #65E0CD 0%, #1B7174 100%)" }}
+          className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-white font-black text-sm sm:text-base transition-all duration-200 hover:scale-[1.01] hover:shadow-lg active:scale-[0.99] flex items-center justify-center gap-2"
+          style={{ background: "#087e94" }}
         >
           تأكيد ومتابعة الطلب
           <ArrowLeft size={16} />
         </button>
-        <p className="text-center text-[9px] sm:text-[10px] text-white/60 mt-2.5 sm:mt-3 flex items-center justify-center gap-1">
-          <Lock size={10} /> بياناتك محمية ومشفرة بالكامل
+        <p className="text-center text-[9px] sm:text-[10px] text-[#718991] mt-2.5 sm:mt-3 flex items-center justify-center gap-1">
+          <Lock size={10} /> راجع بياناتك وخطة السداد قبل المتابعة
         </p>
       </div>
     </div>
@@ -251,10 +264,10 @@ export default function CustomerForm({ total, itemCount, initialData, installmen
 function StepDot({ done, number }: { done: boolean; number: number }) {
   return (
     <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center shrink-0 transition-all ${
-      done ? "bg-emerald-500" : "bg-gradient-to-br from-[#65E0CD] to-[#1B7174]"
+      done ? "bg-emerald-500" : "bg-gradient-to-br from-[#e4f3f6] to-[#d3eaf0]"
     }`}>
       {done ? (
-        <CheckCircle2 size={16} className="text-white sm:w-[18px] sm:h-[18px]" />
+        <CheckCircle2 size={16} className="text-[#173e48] sm:w-[18px] sm:h-[18px]" />
       ) : (
         <span className="text-[#053132] text-xs sm:text-sm font-black">{number}</span>
       )}
@@ -272,11 +285,11 @@ function FloatingInput({
 }) {
   return (
     <div data-field={fieldName}>
-      <label className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-white/80 mb-1.5 sm:mb-2">
-        <span className="text-[#65E0CD]">{icon}</span>
+      <label htmlFor={fieldName} className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-[#52717a] mb-1.5 sm:mb-2">
+        <span className="text-[#087e94]">{icon}</span>
         {label}
       </label>
-      <input
+      <input id={fieldName} aria-invalid={!!error}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -284,10 +297,10 @@ function FloatingInput({
         dir={dir}
         inputMode={inputMode}
         pattern={inputMode === "numeric" ? "[0-9]*" : undefined}
-        className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-white bg-black/20 border-2 transition-all duration-200 focus:outline-none placeholder:text-white/30 ${
+        className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-[#173e48] bg-[#f3f7f8] border-2 transition-all duration-200 focus:outline-none placeholder:text-[#9cacb1] ${
           error
             ? "border-red-400/50 bg-red-500/20 focus:border-red-400"
-            : "border-transparent focus:border-[#65E0CD] focus:bg-black/40"
+            : "border-transparent focus:border-[#65E0CD] focus:bg-white"
         }`}
       />
       {error && <p className="text-red-400 text-[9px] sm:text-[10px] font-bold mt-1 sm:mt-1.5">⚠ {error}</p>}
@@ -301,31 +314,33 @@ function SelectField({ label, value, onChange, options }: {
 }) {
   return (
     <div>
-      <label className="block text-[10px] sm:text-[11px] font-bold text-white/80 mb-1 sm:mb-1.5">{label}</label>
+      <label className="block text-[10px] sm:text-[11px] font-bold text-[#52717a] mb-1 sm:mb-1.5">{label}</label>
       <div className="relative">
-        <select
+        <select aria-label={label}
           value={String(value)}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none bg-black/20 border-2 border-transparent rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white focus:outline-none focus:border-[#65E0CD] focus:bg-black/40 cursor-pointer transition-all"
+          className="w-full appearance-none bg-[#f3f7f8] border-2 border-transparent rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-[#173e48] focus:outline-none focus:border-[#65E0CD] focus:bg-white cursor-pointer transition-all"
         >
-          {options.map((o) => <option key={o.value} value={o.value} className="bg-[#051e1f] text-white">{o.label}</option>)}
+          {options.map((o) => <option key={o.value} value={o.value} className="bg-white text-[#173e48]">{o.label}</option>)}
         </select>
-        <ChevronDown size={13} className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
+        <ChevronDown size={13} className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-[#92a4aa] pointer-events-none" />
       </div>
     </div>
   );
 }
 
-function PaymentCard({ label, value, unit, highlight }: { label: string; value: string; unit: string; highlight?: boolean }) {
+function PaymentCard({ label, value, unit, highlight }: { label: string; value: string; unit: React.ReactNode; highlight?: boolean }) {
   return (
     <div className={`rounded-lg sm:rounded-xl p-2.5 sm:p-3 text-center transition-all ${
       highlight
-        ? "bg-gradient-to-br from-[#65E0CD] to-[#1B7174] text-[#053132] shadow-lg shadow-[#65E0CD20]"
-        : "bg-black/20 border border-white/10"
+        ? "bg-gradient-to-br from-[#e4f3f6] to-[#d3eaf0] text-[#053132] shadow-lg shadow-[#65E0CD20]"
+        : "bg-[#f3f7f8] border border-[#dce8eb]"
     }`}>
-      <p className={`text-[9px] sm:text-[10px] font-medium mb-0.5 sm:mb-1 ${highlight ? "text-[#053132]/60" : "text-white/70"}`}>{label}</p>
-      <p className={`text-sm sm:text-lg font-black leading-tight ${highlight ? "text-[#053132]" : "text-white"}`}>{value}</p>
-      <p className={`text-[9px] sm:text-[10px] ${highlight ? "text-[#053132]/50" : "text-white/70"}`}>{unit}</p>
+      <p className={`text-[9px] sm:text-[10px] font-medium mb-0.5 sm:mb-1 ${highlight ? "text-[#053132]/60" : "text-[#657e86]"}`}>{label}</p>
+      <p className={`text-sm sm:text-lg font-black leading-tight ${highlight ? "text-[#053132]" : "text-[#173e48]"}`}>{value}</p>
+      <p className={`text-[9px] sm:text-[10px] ${highlight ? "text-[#053132]/50" : "text-[#657e86]"}`}>{unit}</p>
     </div>
   );
 }
+
+

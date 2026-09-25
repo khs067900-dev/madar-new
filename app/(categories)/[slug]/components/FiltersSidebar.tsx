@@ -1,8 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoClose, IoOptions, IoRefresh, IoSwapVertical, IoCheckmark, IoStorefront, IoPricetag, IoFlash } from "react-icons/io5";
 import type { Filters, SortKey } from "./useProductFilters";
+
+function SAR({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/money-icon.webp"
+      alt="ر.س"
+      width={32}
+      height={32}
+      className={`inline-block align-middle ${className ?? ""}`}
+    />
+  );
+}
 
 interface Props {
   filters: Filters;
@@ -156,7 +169,7 @@ function FiltersContent({ filters, storageOptions, maxProductPrice, activeCount,
               animate={{ scale: 1 }}
               className="text-xs font-black text-teal-300 bg-teal-500/20 border border-teal-400/30 px-2 py-0.5 rounded-lg"
             >
-              {filters.maxPrice !== null ? `${fmt(filters.maxPrice)} ر.س` : "الكل"}
+              {filters.maxPrice !== null ? <span className="inline-flex items-center gap-0.5">{fmt(filters.maxPrice)} <SAR /></span> : "الكل"}
             </motion.span>
           </div>
           <div className="relative h-5 flex items-center">
@@ -183,8 +196,8 @@ function FiltersContent({ filters, storageOptions, maxProductPrice, activeCount,
             />
           </div>
           <div className="flex justify-between text-[10px] text-white/40 mt-2">
-            <span>0 ر.س</span>
-            <span>{fmt(priceMax)} ر.س</span>
+            <span className="inline-flex items-center gap-0.5">0 <SAR /></span>
+            <span className="inline-flex items-center gap-0.5">{fmt(priceMax)} <SAR /></span>
           </div>
         </div>
       </div>

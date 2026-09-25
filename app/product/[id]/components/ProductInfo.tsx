@@ -5,6 +5,18 @@ import Image from "next/image";
 import { IoCartOutline, IoShieldCheckmark, IoCarOutline, IoRemove, IoAdd, IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import type { Product } from "../../../components/products/types";
 
+function SAR({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/money-icon.webp"
+      alt="ر.س"
+      width={32}
+      height={32}
+      className={`inline-block align-middle ${className ?? ""}`}
+    />
+  );
+}
+
 const fmt = (n: number) => n.toLocaleString("en-US");
 interface Props {
   product: Product;
@@ -37,11 +49,11 @@ export default function ProductInfo({ product, addedToCart, onAddToCart, onBuyNo
         <span className={available ? "stock-label" : ""}>{available ? "متوفر للطلب" : "غير متوفر حاليًا"}</span>
       </div>
       <h1>{variant?.name || product.name.replace(/^"|"$/g, "")}</h1>
-      <div className="product-price"><span className="field-label">سعر الجهاز</span><div><strong>{fmt(price)}</strong> <span>ريال</span>{original > price && <del>{fmt(original)} ريال</del>}</div>{product.taxIncluded && <small>شامل ضريبة القيمة المضافة</small>}</div>
+      <div className="product-price"><span className="field-label">سعر الجهاز</span><div><strong>{fmt(price)}</strong> <SAR className="mb-0.5" />{original > price && <del>{fmt(original)} <SAR className="opacity-50 mb-0.5" /></del>}</div>{product.taxIncluded && <small>شامل ضريبة القيمة المضافة</small>}</div>
 
       <section className="installment-card" aria-label="التقسيط بسعر الكاش">
         <div className="installment-heading"><span className="installment-icon"><IoCheckmarkCircle size={22}/></span><div><h2>تقسيط بسعر الكاش</h2><p>على سنتين بدون فوائد</p></div></div>
-        <div className="installment-numbers"><div><span>الدفعة الأولى</span><p><strong>1,000</strong> ريال</p></div><div><span>المتبقي للتقسيط</span><p><strong>{fmt(Math.max(0, price - 1000))}</strong> ريال</p></div></div>
+        <div className="installment-numbers"><div><span>الدفعة الأولى</span><p><strong>1,000</strong> <SAR className="mb-0.5" /></p></div><div><span>المتبقي للتقسيط</span><p><strong>{fmt(Math.max(0, price - 1000))}</strong> <SAR className="mb-0.5" /></p></div></div>
         <div className="installment-foot"><span>نفس سعر الكاش</span><span>24 شهر · بدون فوائد</span></div>
       </section>
 

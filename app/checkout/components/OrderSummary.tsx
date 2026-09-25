@@ -1,4 +1,26 @@
+import React from "react";
+import Image from "next/image";
 import { IoTimeOutline, IoWalletOutline } from "react-icons/io5";
+
+function SAR({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/money-icon.webp"
+      alt="ر.س"
+      width={32}
+      height={32}
+      className={`inline-block align-middle ${className ?? ""}`}
+    />
+  );
+}
+
+function PriceVal({ amount, className }: { amount: number; className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-0.5 ${className ?? ""}`}>
+      {amount.toLocaleString("en-US")} <SAR />
+    </span>
+  );
+}
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -18,16 +40,16 @@ export default function OrderSummary({ total, downPayment, installmentType, mont
   return (
     <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/30 backdrop-blur-md">
       <div className="p-4 sm:p-5 space-y-3">
-        <Row label="مجموع السلة" value={`${fmt(total)} ر.س`} />
+        <Row label="مجموع السلة" value={<PriceVal amount={total} />} />
         <Row label="التوصيل" value="مجاني 🚀" highlight />
 
         {isInstallment && (
           <>
             <div className="h-px bg-white/10 my-1" />
-            <Row label="الدفعة الأولى (الآن)" value={`${fmt(downPayment)} ر.س`} accent />
-            <Row label="المتبقي بالتقسيط" value={`${fmt(remaining > 0 ? remaining : 0)} ر.س`} />
+            <Row label="الدفعة الأولى (الآن)" value={<PriceVal amount={downPayment} />} accent />
+            <Row label="المتبقي بالتقسيط" value={<PriceVal amount={remaining > 0 ? remaining : 0} />} />
             {monthlyPayment > 0 && (
-              <Row label={`القسط الشهري × ${months}`} value={`${fmt(monthlyPayment)} ر.س`} />
+              <Row label={`القسط الشهري × ${months}`} value={<PriceVal amount={monthlyPayment} />} />
             )}
           </>
         )}
@@ -42,14 +64,14 @@ export default function OrderSummary({ total, downPayment, installmentType, mont
           </div>
           <div className="text-right">
             <span className="text-[#053132] text-2xl font-black">{fmt(payNow)}</span>
-            <span className="text-[#053132]/60 text-xs font-medium mr-1">ر.س</span>
+            <SAR className="opacity-70 mb-1 mr-1" />
           </div>
         </div>
         {isInstallment && (
           <div className="flex items-center gap-1 mt-1.5">
             <IoTimeOutline size={12} className="text-[#053132]/60" />
             <p className="text-[#053132]/70 text-[11px]">
-              ثم {fmt(monthlyPayment)} ر.س شهرياً لمدة {months} شهر
+              ثم {fmt(monthlyPayment)} <SAR className="opacity-60" /> شهرياً لمدة {months} شهر
             </p>
           </div>
         )}
@@ -61,7 +83,7 @@ export default function OrderSummary({ total, downPayment, installmentType, mont
   );
 }
 
-function Row({ label, value, highlight, accent }: { label: string; value: string; highlight?: boolean; accent?: boolean }) {
+function Row({ label, value, highlight, accent }: { label: string; value: React.ReactNode; highlight?: boolean; accent?: boolean }) {
   return (
     <div className="flex justify-between items-center text-xs sm:text-sm">
       <span className={accent ? "text-[#65E0CD] font-bold" : "text-white/60"}>{label}</span>

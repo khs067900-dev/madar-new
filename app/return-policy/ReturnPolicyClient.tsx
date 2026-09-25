@@ -2,7 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import ContactSection from "../components/ContactSection";
 
-function useInView(threshold = 0.12) {
+/* ─── brand ─── */
+const BRAND  = "#0889A2";
+const BRAND2 = "#003048";
+
+/* ─── Reveal ─── */
+function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -18,70 +23,71 @@ function useInView(threshold = 0.12) {
   return { ref, visible };
 }
 
-function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const { ref, visible } = useInView();
   return (
     <div ref={ref} style={{
       opacity: visible ? 1 : 0,
-      transform: visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.98)",
-      transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.65s cubic-bezier(.22,1,.36,1) ${delay}ms`,
+      transform: visible ? "translateY(0)" : "translateY(26px)",
+      transition: `opacity 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms`,
     }}>
       {children}
     </div>
   );
 }
 
+/* ─── icons ─── */
 const IconBox = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth={1.8}>
-    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" strokeLinecap="round" strokeLinejoin="round"/>
-    <polyline points="3.27 6.96 12 12.01 20.73 6.96" strokeLinecap="round" strokeLinejoin="round"/>
-    <line x1="12" y1="22.08" x2="12" y2="12" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+    <line x1="12" y1="22.08" x2="12" y2="12"/>
   </svg>
 );
 const IconClock = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth={1.8}>
+  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="12 6 12 12 16 14"/>
   </svg>
 );
 const IconBan = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth={1.8}>
+  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
-    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" strokeLinecap="round"/>
+    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
   </svg>
 );
-const IconXCircle = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth={1.8}>
+const IconX = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
-    <line x1="15" y1="9" x2="9" y2="15" strokeLinecap="round"/>
-    <line x1="9" y1="9" x2="15" y2="15" strokeLinecap="round"/>
+    <line x1="15" y1="9" x2="9" y2="15"/>
+    <line x1="9" y1="9" x2="15" y2="15"/>
   </svg>
 );
 
-const sections = [
+const cards = [
   {
-    Icon: IconBox,
+    num: "01", Icon: IconBox,
     title: "حالة المنتج",
-    accent: "#2dd4bf",
-    content: "يشترط أن يكون المنتج في حالته الأصلية وغير مستخدم، مع الحفاظ على التغليف والملحقات والفاتورة إن وجدت.",
+    accent: BRAND,
+    body: "المنتج لازم يكون بحالته الأصلية ما استخدم، ومعه تغليفه والملحقات والفاتورة — هذا شرط أساسي لقبول طلب الاسترجاع.",
   },
   {
-    Icon: IconClock,
-    title: "مدة طلب الاسترجاع",
-    accent: "#5eead4",
-    content: "يتم تقديم طلبات الاستبدال أو الاسترجاع خلال 14 يومًا من تاريخ استلام الطلب حسب سياسة المتجر، وبعد مراجعة حالة الطلب والمنتج.",
+    num: "02", Icon: IconClock,
+    title: "مدة الاسترجاع",
+    accent: "#16a34a",
+    body: "تقدر تطلب الاستبدال أو الاسترجاع خلال ١٤ يوم من يوم استلامك الطلب — بعد مراجعة حالة المنتج.",
   },
   {
-    Icon: IconBan,
-    title: "المنتجات غير القابلة للاسترجاع",
-    accent: "#f87171",
-    content: "بعض المنتجات قد لا تكون قابلة للاسترجاع أو الاستبدال بعد فتحها أو استخدامها، وخاصة المنتجات الشخصية أو الرقمية أو التي تم تجهيزها بطلب خاص.",
+    num: "03", Icon: IconBan,
+    title: "منتجات ما تنرجع",
+    accent: "#dc2626",
+    body: "بعض المنتجات ما تنقبل للاسترجاع بعد الفتح أو الاستخدام — خاصةً الشخصية والرقمية واللي طلبتها بمواصفات خاصة.",
   },
   {
-    Icon: IconXCircle,
-    title: "إلغاء الطلبات",
-    accent: "#fbbf24",
-    content: "يمكن إلغاء الطلب قبل التجهيز أو الشحن، أما إذا تم شحن الطلب فيتم التعامل معه وفق سياسة الاسترجاع المعتمدة.",
+    num: "04", Icon: IconX,
+    title: "إلغاء الطلب",
+    accent: "#d97706",
+    body: "تقدر تلغي طلبك قبل التجهيز والشحن. لو الطلب اتشحن، نتعامل معه حسب سياسة الاسترجاع المعتمدة عندنا.",
   },
 ];
 
@@ -93,109 +99,101 @@ export default function ReturnPolicyClient() {
 
   useEffect(() => { const t = setTimeout(() => setHeroVisible(true), 60); return () => clearTimeout(t); }, []);
   useEffect(() => {
-    fetch("/api/admin/company").then((r) => r.json()).then(setCompany).catch(() => {});
+    fetch("/api/admin/company").then(r => r.json()).then(setCompany).catch(() => {});
   }, []);
 
-  const anim = (delay: number) => ({
+  const anim = (d: number) => ({
     style: {
       opacity: heroVisible ? 1 : 0,
-      transform: heroVisible ? "translateY(0)" : "translateY(22px)",
-      transition: `opacity 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms`,
+      transform: heroVisible ? "translateY(0)" : "translateY(24px)",
+      transition: `opacity 0.7s cubic-bezier(.16,1,.3,1) ${d}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${d}ms`,
     },
   } as React.HTMLAttributes<HTMLElement>);
 
   return (
-    <main dir="rtl" className="min-h-screen overflow-x-hidden bg-[#f8f9fc]">
-      {/* ════════ HERO ════════ */}
-      <section className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #053132 0%, #092C32 40%, #0A2931 70%, #0B2631 100%)" }}>
+    <main dir="rtl" className="min-h-screen overflow-x-hidden bg-white">
 
-        {/* decorative blobs */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-white/5 blur-[80px]" />
-          <div className="absolute top-10 left-10 w-64 h-64 rounded-full blur-[60px]" style={{ background: "rgba(255,255,255,0.04)" }} />
-          <div className="absolute bottom-0 left-1/2 w-[600px] h-40 -translate-x-1/2 blur-[50px]" style={{ background: "rgba(5,49,50,0.4)" }} />
-        </div>
+      {/* ══ HERO ══ */}
+      <section className="relative w-full overflow-hidden bg-white" style={{ borderBottom: "1px solid #edf2f7" }}>
+        <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, ${BRAND}, #a8d8e0, ${BRAND})` }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse 70% 55% at 50% -10%, rgba(8,137,162,0.06) 0%, transparent 70%)` }} />
 
-        {/* grid pattern */}
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
-
-        <div className="relative max-w-4xl mx-auto px-5 sm:px-10 py-20 sm:py-32 text-center text-white">
-          <div {...anim(80)} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium mb-6" style={{ color: "#a7f3d0" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="relative max-w-4xl mx-auto px-5 sm:px-10 pt-20 sm:pt-28 pb-16 sm:pb-20 text-center">
+          <div {...anim(80)} className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold mb-6 tracking-widest uppercase"
+            style={{ background: "rgba(8,137,162,0.07)", border: "1px solid rgba(8,137,162,0.18)", color: BRAND }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: BRAND }} />
             الشروط والسياسات
           </div>
 
-          <h1 {...anim(200)} className="text-3xl sm:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-5 leading-tight tracking-tight">
-            سياسة الاستبدال
-            <span className="block text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(to left, #a7f3d0, #ffffff)" }}>
-              والاسترجاع
-            </span>
+          <h1 {...anim(200)} className="text-3xl sm:text-5xl lg:text-6xl font-black mb-4 leading-tight tracking-tight" style={{ color: BRAND2 }}>
+            الاستبدال
+            <span className="block" style={{ color: BRAND }}>والاسترجاع</span>
           </h1>
 
-          <p {...anim(340)} className="text-base sm:text-lg max-w-xl mx-auto leading-relaxed" style={{ color: "rgba(167,243,208,0.85)" }}>
-            الشروط المنظمة لطلبات الإلغاء والاستبدال والاسترجاع داخل مؤسسة مدار الاجهزة الالكترونية
+          <p {...anim(340)} className="text-sm sm:text-lg max-w-xl mx-auto leading-loose" style={{ color: "#4a6072" }}>
+            شروطنا في الإلغاء والاستبدال والاسترجاع — واضحة ومباشرة ومحترمة
           </p>
-        </div>
 
-        {/* wave */}
-        <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1440 70" className="w-full h-12 sm:h-16" preserveAspectRatio="none">
-            <path d="M0,35 C240,70 480,0 720,35 C960,70 1200,0 1440,35 L1440,70 L0,70 Z" fill="#f8f9fc" />
-          </svg>
+          {/* quick-fact chips */}
+          <div {...anim(440)} className="flex flex-wrap justify-center gap-2 mt-7">
+            {[
+              { label: "١٤ يوم استرجاع", color: BRAND },
+              { label: "منتج أصلي فقط",   color: "#16a34a" },
+              { label: "بدون تعقيد",      color: "#d97706" },
+            ].map((f) => (
+              <span key={f.label} className="inline-flex items-center text-xs font-semibold rounded-full px-4 py-1.5"
+                style={{ background: `${f.color}0f`, border: `1px solid ${f.color}28`, color: f.color }}>
+                {f.label}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ════════ CARDS ════════ */}
-      <section className="w-full max-w-4xl mx-auto px-4 sm:px-8 lg:px-10 py-8 sm:py-10 space-y-4 sm:space-y-5">
-        {sections.map((s, i) => (
-          <FadeUp key={s.title} delay={i * 110}>
-            <div
-              className="group rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-300 hover:scale-[1.01]"
-              style={{
-                background: "#ffffff",
-                border: "1px solid rgba(45,212,191,0.18)",
-                boxShadow: "0 2px 16px rgba(5,49,50,0.08)",
-              }}
-            >
-              {/* Top accent line */}
-              <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, ${s.accent}, transparent)` }} />
-
+      {/* ══ POLICY CARDS ══ */}
+      <section className="w-full max-w-4xl mx-auto px-4 sm:px-8 py-10 space-y-4">
+        {cards.map((c, i) => (
+          <Reveal key={c.title} delay={i * 110}>
+            <div className="group rounded-2xl sm:rounded-3xl overflow-hidden hover:shadow-md transition-all duration-300"
+              style={{ background: "#ffffff", border: "1px solid #e8f0f4" }}>
               <div className="flex flex-col sm:flex-row">
-                {/* Side accent */}
-                <div className="hidden sm:block w-[3px] shrink-0" style={{ background: `linear-gradient(180deg, ${s.accent}, transparent)` }} />
+                {/* number strip */}
+                <div className="hidden sm:flex flex-col items-center pt-7 px-5 shrink-0 gap-2">
+                  <span className="text-2xl font-black" style={{ color: `${c.accent}28` }}>{c.num}</span>
+                  <div className="w-px flex-1 mb-5" style={{ background: `linear-gradient(to bottom, ${c.accent}30, transparent)` }} />
+                </div>
+                {/* mobile top accent */}
+                <div className="sm:hidden h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${c.accent}, transparent)` }} />
 
                 <div className="flex-1 p-5 sm:p-7">
                   <div className="flex items-center gap-3 mb-4">
-                    {/* Icon */}
-                    <div
-                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300"
-                      style={{ background: `${s.accent}18`, color: s.accent }}
-                    >
-                      <s.Icon />
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300"
+                      style={{ background: `${c.accent}10`, color: c.accent, border: `1px solid ${c.accent}22` }}>
+                      <c.Icon />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-bold text-white">{s.title}</h2>
-                      <div className="h-[2px] w-8 mt-1 rounded-full" style={{ background: s.accent }} />
+                      <h2 className="text-base sm:text-xl font-extrabold" style={{ color: BRAND2 }}>{c.title}</h2>
+                      <div className="h-px w-10 mt-1.5 rounded-full" style={{ background: `linear-gradient(90deg, ${c.accent}, transparent)` }} />
                     </div>
                   </div>
-                  <p className="text-sm sm:text-base leading-relaxed text-gray-600">{s.content}</p>
+                  <p className="text-sm sm:text-base leading-loose" style={{ color: "#4a6072" }}>{c.body}</p>
                 </div>
               </div>
             </div>
-          </FadeUp>
+          </Reveal>
         ))}
+      </section>
 
+      {/* ══ CONTACT ══ */}
+      <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 pb-16">
         <ContactSection
-          title="التواصل بخصوص الطلبات"
+          title="تواصل معنا بخصوص طلبك"
           phone={company?.phone}
           whatsapp={company?.whatsapp}
           email={company?.email}
-          fadeDelay={400}
+          fadeDelay={200}
         />
-      </section>
-
-      <div className="h-16" />
+      </div>
     </main>
   );
 }

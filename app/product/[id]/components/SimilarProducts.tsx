@@ -5,6 +5,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { IoArrowBack, IoArrowForward, IoFlame } from "react-icons/io5";
+
+function SAR({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/money-icon.webp"
+      alt="ر.س"
+      width={32}
+      height={32}
+      className={`inline-block align-middle ${className ?? ""}`}
+    />
+  );
+}
 import type { Product } from "../../../components/products/types";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -144,11 +156,11 @@ export default function SimilarProducts({ product }: { product: Product }) {
                     <div className="flex items-end justify-between">
                       <div>
                         {hasDiscount && (
-                          <span className="text-[10px] text-gray-400 line-through block">{fmt(originalPrice)} ر.س</span>
+                          <span className="text-[10px] text-gray-400 line-through block flex items-center gap-0.5">{fmt(originalPrice)} <SAR className="opacity-60" /></span>
                         )}
                         <div className="flex items-baseline gap-0.5">
                           <span className="text-base sm:text-lg font-black text-[#053132]">{fmt(displayPrice)}</span>
-                          <span className="text-[9px] text-gray-400 font-medium">ر.س</span>
+                          <SAR className="opacity-60 mb-0.5" />
                         </div>
                       </div>
                       <div className="w-8 h-8 rounded-xl bg-[#053132]/5 flex items-center justify-center group-hover:bg-[#053132] transition-colors">
