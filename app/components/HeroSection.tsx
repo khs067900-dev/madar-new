@@ -62,11 +62,11 @@ export default function HeroSection() {
       />
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-12 pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-36 lg:pb-20">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-12 pt-20 pb-7 sm:pt-28 sm:pb-14 lg:pt-36 lg:pb-20">
         <div className="max-w-xl">
 
           {/* ── Headline ── */}
-          <h1 className="font-black leading-tight tracking-tight mb-4" style={{ fontSize: "clamp(2rem, 5vw, 3.8rem)" }}>
+          <h1 className="font-black leading-tight tracking-tight mb-3 sm:mb-4" style={{ fontSize: "clamp(2rem, 5vw, 3.8rem)" }}>
 
             {/* line 1 */}
             <span className="block" style={{
@@ -93,7 +93,7 @@ export default function HeroSection() {
           </h1>
 
           {/* ── Description ── */}
-          <p className="text-sm sm:text-base font-semibold leading-relaxed mb-7 max-w-lg" style={{
+          <p className="text-sm sm:text-base font-semibold leading-relaxed mb-4 sm:mb-7 max-w-lg" style={{
             color: "#003048",
             textShadow: "0 0 30px rgba(255,255,255,1), 0 0 15px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.8)",
             WebkitTextStroke: isMobile ? "0.2px #003048" : "0",
@@ -105,7 +105,7 @@ export default function HeroSection() {
           </p>
 
           {/* ── CTAs ── */}
-          <div className="flex flex-wrap gap-3 mb-8">
+          <div className="flex flex-wrap gap-3 mb-5 sm:mb-8">
             <Link
               href="/store"
               className="inline-flex items-center gap-2 text-white font-bold text-sm px-6 py-3 rounded-2xl transition-all duration-200 hover:scale-[1.02]"
@@ -161,3 +161,4 @@ export default function HeroSection() {
     </section>
   );
 }
+
