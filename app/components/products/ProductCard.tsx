@@ -20,6 +20,7 @@ function storageLabel(value: string) {
 export default function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
+  const router = useRouter();
   const href = `/product/${product._id}`;
   const image = product.images?.[0] || product.image;
   const imageUrl = image ? (image.startsWith("http") ? image : `${API}${image.startsWith("/") ? image : `/${image}`}`) : undefined;
@@ -33,6 +34,14 @@ export default function ProductCard({ product, priority = false }: { product: Pr
   const hasVariants = !!product.variants?.length;
   const available = product.inStock !== false;
   const title = product.name.replace(/^"|"$/g, "");
+
+  function handleAddToCart() {
+    if (!available || added) return;
+    addItem(product);
+    setAdded(true);
+    toast.success("تمت الإضافة للسلة ✓", { duration: 2000 });
+    setTimeout(() => router.push("/cart"), 800);
+  }
 
   return (
     <article className="catalog-card" dir="rtl">
@@ -48,10 +57,20 @@ export default function ProductCard({ product, priority = false }: { product: Pr
         </div>
         <div className="catalog-price"><div>{prices.length > 1 && <small>من </small>}<strong>{fmt(price)}</strong><span> ر.س</span></div>{!prices.length && original > price && <del>{fmt(original)}</del>}</div>
         {product.installment?.available && <p className="catalog-installment">مقدم <b>{fmt(product.installment.downPayment || 1000)}</b> ريال · بدون فوائد</p>}
-        {hasVariants ? <Link href={href} className="catalog-action">اختر السعة واللون <IoArrowBack size={15}/></Link> : <button type="button" className="catalog-action" disabled={!available || added} onClick={() => { addItem(product); setAdded(true); }} aria-label={`أضف ${title} إلى السلة`}>{added ? <><IoCheckmark size={16}/>تمت الإضافة</> : <><IoCartOutline size={16}/>{available ? "أضف للسلة" : "غير متوفر"}</>}</button>}
+        <button
+          type="button"
+          className="catalog-action"
+          disabled={!available || added}
+          onClick={handleAddToCart}
+          aria-label={`أضف ${title} إلى السلة`}
+        >
+          {added
+            ? <><IoCheckmark size={16}/>تمت الإضافة</>
+            : <><IoCartOutline size={16}/>{available ? (hasVariants ? "اطلبه الآن" : "أضف للسلة") : "غير متوفر"}</>
+          }
+        </button>
         <span className="sr-only" role="status">{added ? "تمت إضافة المنتج للسلة" : ""}</span>
       </div>
     </article>
   );
 }
-

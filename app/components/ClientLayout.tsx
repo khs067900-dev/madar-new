@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import { Navbar } from "./navbar";
 import WhatsappButton from "./WhatsappButton";
